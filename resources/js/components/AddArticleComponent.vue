@@ -15,7 +15,7 @@
                                                 <input class="form-control" type="text" placeholder="name"
                                                        v-model="name">
                                                 <div class="alert alert-warning" role="alert" v-if="errorMessage.title">
-                                                    {{errorMessage.title[0]}}
+                                                    {{ errorMessage.title[0] }}
                                                 </div>
                                             </div>
                                         </div>
@@ -24,7 +24,7 @@
                                                 <input class="form-control" type="email" placeholder="email address"
                                                        v-model="email">
                                                 <div class="alert alert-warning" role="alert" v-if="errorMessage.body">
-                                                    {{errorMessage.body[0]}}
+                                                    {{ errorMessage.body[0] }}
                                                 </div>
                                             </div>
                                         </div>
@@ -33,15 +33,22 @@
                                                 <input class="form-control" type="text" placeholder="Text"
                                                        v-model="text">
                                                 <div class="alert alert-warning" role="alert" v-if="errorMessage.slug">
-                                                    {{errorMessage.slug[0]}}
+                                                    {{ errorMessage.slug[0] }}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <button type="submit"
-                                                    class="btn btn-md btn-block btn-danger-gradiant text-white border-0">
-                                                <span> Create Account</span></button>
-                                            <!-- -->
+                                        <div class="col-lg-6">
+                                            <div :class="{mx_recaptcha_failed: !recaptcha}">
+                                                <vue-recaptcha
+                                                    sitekey="6Lf0BJ0jAAAAAIxB0XMKkJ7b2t-lM5vawQltdohw"
+                                                    @verify="mxVerify">
+                                                </vue-recaptcha>
+                                                <br/>
+                                                <small>Doesn't complete!</small>
+                                                <button type="submit"
+                                                        class="btn btn-md btn-block btn-danger-gradiant text-white border-0">
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -111,7 +118,7 @@
                         </ul>
                     </b-card>
                 </template>
-            <template #cell(actions)="row" v-for="article of articles">
+                <template #cell(actions)="row" v-for="article of articles">
                     <b-button :href="('/articles/'+ article.slug)" class="mr-1">
                         More
                     </b-button>
@@ -121,22 +128,26 @@
     </div>
 </template>
 <script>
+import {VueRecaptcha} from 'vue-recaptcha';
+
 export default {
+    components: {VueRecaptcha},
     data() {
         return {
+            recaptcha: null,
             totalRows: 1,
             currentPage: 1,
             perPage: 5,
-            pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
+            pageOptions: [5, 10, 15, {value: 100, text: "Show a lot"}],
             sortBy: '',
             sortDesc: false,
             sortDirection: 'asc',
             filter: null,
             filterOn: [],
             fields: [
-                { key: 'title', label: 'Article', sortable: true, sortDirection: 'desc' },
-                { key: 'body', label: 'email', sortable: true, class: 'text-center' },
-                { key: 'slug', label: 'Text', sortable: true, class: 'text-center' },
+                {key: 'title', label: 'Article', sortable: true, sortDirection: 'desc'},
+                {key: 'body', label: 'email', sortable: true, class: 'text-center'},
+                {key: 'slug', label: 'Text', sortable: true, class: 'text-center'},
                 {
 
                     formatter: (value, key, item) => {
@@ -146,9 +157,9 @@ export default {
                     sortByFormatted: true,
                     filterByFormatted: true
                 },
-                { key: 'actions', label: 'Actions' }
+                {key: 'actions', label: 'Actions'}
             ],
-            formInv:false,
+            formInv: false,
             name: '',
             email: '',
             text: ''
@@ -156,13 +167,13 @@ export default {
     },
     computed: {
 
-        articles(){
+        articles() {
             return this.$store.state.article.articles;
         },
         commentSuccess() {
             return this.$store.state.article.commentSuccess;
         },
-        errorMessage(){
+        errorMessage() {
             return this.$store.state.article.errors;
         },
 
@@ -174,9 +185,12 @@ export default {
             this.totalRows = articles.length
             this.currentPage = 1
         },
+        mxVerify(response) {
+            this.recaptcha = response
+        },
         submit_form() {
 
-            if (this.recaptcha){
+            if (this.recaptcha) {
                 this.$store.dispatch('article/addArticle', {
                     name: this.name,
                     email: this.email,
@@ -185,18 +199,29 @@ export default {
                 this.name = ''
                 this.email = ''
                 this.text = ''
-            }else {
+            } else {
                 this.formInv = true
             }
         },
     },
-    updated(){
+    updated() {
         this.totalRows = this.articles.length
     }
 }
 </script>
 
 <style>
+small {
+    color: red;
+    display: none;
+}
 
+.mx_form_inv .mx_empty_field ~ small {
+    display: block;
+}
+
+.mx_form_inv .mx_recaptcha_failed small {
+    display: block;
+}
 </style>
 
