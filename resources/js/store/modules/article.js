@@ -42,7 +42,6 @@ export const actions = {
             context.commit('SET_COMMENT_SUCCESS', !state.commentSuccess);
             context.dispatch('getArticleData', context.rootState.slug)
         }).catch((error)=>{
-            console.log(error)
             if (error.response.status === 422) {
                 context.state.errors = error.response.data.errors;
             }

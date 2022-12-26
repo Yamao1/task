@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="uk-margin-top-small uk-text-center">
-                    <input type="file" name="file[]" accept=".png,.jpg,.jpeg,.gif,.webp" id="attachment" multiple @change="uploadPreviewFiles"/>
+                    <input type="file" name="file" accept=".png,.jpg,.jpeg,.gif,.webp" id="attachment" @change="uploadPreviewFiles"/>
                     <div class="alert alert-warning" role="alert" v-if="errorMessage.img">
                         {{ errorMessage.img[0] }}
                     </div>
@@ -44,10 +44,11 @@
                 <div class="toast-body">
                     {{ comment.body }}
                 </div>
-                <div v-if="comment.img">
+                <div v-if="comment.img !== null" >
                     <img  :src="comment.img" style="width: 40px;height: 40px" class="rounded me-2" alt="">
+
                 </div>
-                <div v-else><img src="https://via.placeholder.com/50/5f113b/ffffff/?text=img" class="rounded me-2" alt=""></div>
+                <div></div>
 
             </div>
         </div>
@@ -80,6 +81,9 @@ export default {
         }
     },
     methods: {
+        showComment(comment){
+            console.log(comment)
+        },
         uploadPreviewFiles(event) {
             for (let file of event.target.files) {
                 let fileCont = document.createElement('div');
@@ -126,7 +130,9 @@ export default {
             form_data.append('subject' , this.subject)
             form_data.append('body' , this.body)
             form_data.append('article_id' , this.$store.state.article.article.id)
-            form_data.append('img' , this.files[0])
+            if (this.files.length > 0){
+                form_data.append('img' , this.files[0])
+            }
             this.$store.dispatch('article/addComment', form_data)
         },
         deleteFileFromList(file, fileCont) {
@@ -136,7 +142,7 @@ export default {
         }
     },
     mounted() {
-        this.show = this.$store.state.article.article.comments
+        console.log(this.$store.state.article.article.comments)
         // this.dropzone = new Dropzone(this.$refs.dropzone, {
         //     url: "sfsdfg",
         //     autoProcessQueue:false

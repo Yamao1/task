@@ -5,6 +5,9 @@ Run
 
 composer install
 
+npm install
+
+php artisan storage:link
 
 Copy the "env.example" file in the root directory and rename it to ".env"
 
@@ -15,7 +18,7 @@ Create database
 In .env file update the database configuration variables
 
 
-Generate APP_KEY - php artisan key: generate
+Generate APP_KEY - php artisan key:generate
 
 
 Run migration and seed

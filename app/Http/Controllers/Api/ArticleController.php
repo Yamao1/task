@@ -19,30 +19,16 @@ class ArticleController extends Controller
 
     public function index(Request $request){
         $article = Article::all();
-//      return new ArticleResource($article);
+//        dd(new ArticleResource($article));
         return $article;
     }
 
 
-   public function show(Request $request){
-       $article = $this->service->getArticleBySlug($request);
+    public function show(Request $request){
+        $article = $this->service->getArticleBySlug($request);
+//       $article = $request->all();
+//       dd(new ArticleResource($article))
        return new ArticleResource($article);
-   }
-
-    public function viewsIncrement(Request $request)
-    {
-        $article = $this->service->getArticleBySlug($request);
-
-        $article->state->increment('views');
-        return new ArticleResource($article);
     }
 
-    public function likesIncrement(Request $request)
-    {
-        $article = $this->service->getArticleBySlug($request);
-
-        $inc = $request->get('increment');
-        $inc ? $article->state->increment('likes') : $article->state->decrement('likes');
-        return new ArticleResource($article);
-    }
 }

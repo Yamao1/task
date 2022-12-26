@@ -20,7 +20,7 @@ class AddNewComment implements ShouldQueue
    protected $subject;
    protected $article_id;
    protected $img;
-    public function __construct($subject, $body, $article_id, $img)
+    public function __construct($subject, $body, $article_id, $img = null)
     {
         $this->subject = $subject;
         $this->body = $body;

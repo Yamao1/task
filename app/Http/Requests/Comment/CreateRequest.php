@@ -26,8 +26,7 @@ class CreateRequest extends FormRequest
         return [
             'subject' => 'required',
             'body' => 'required',
-            'article_id' => 'required',
-            'img'=>'required',
+
         ];
     }
 
@@ -35,10 +34,9 @@ class CreateRequest extends FormRequest
     {
         return [
             'subject.required' => 'Это поле надо обязательно заполнить',
-            'subject.min' => 'Это поле должно быть длиннее 6 символов',
             'body.required' => 'Это поле надо обязательно заполнить',
-            'body.min' => 'Это поле должно быть длиннее 10 символов',
-            'img.required' => 'Это поле обязательно. Не будь жадиной, отправь картинку',
+
+
         ];
 
     }

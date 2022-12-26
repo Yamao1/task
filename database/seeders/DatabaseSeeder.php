@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
 
         $articles->each(function ($article) use ($tags_id) {
             $article->tags()->attach($tags_id->random(3));
-//            \App\Models\Comment::factory(3)->create([
+//            \App\Models\Comment::factory(1)->create([
 //                'article_id' => $article->id
 //            ]);
 
