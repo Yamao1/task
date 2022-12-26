@@ -26,5 +26,5 @@ Run migration and seed
 
 
 P.S.
-for reCAPTCHA use "APP_URL=http://task" in .env
+for reCAPTCHA use domain name  "http://task" 
 
