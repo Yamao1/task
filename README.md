@@ -25,3 +25,6 @@ Run migration and seed
 ######php artisan migrate --seed
 
 
+P.S.
+for reCAPTCHA use "APP_URL=http://task" in .env
+

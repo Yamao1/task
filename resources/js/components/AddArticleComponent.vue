@@ -126,9 +126,7 @@
     </div>
 </template>
 <script>
-
 import { VueRecaptcha } from 'vue-recaptcha';
-
 export default {
     components: { VueRecaptcha },
     data() {
@@ -136,8 +134,8 @@ export default {
             recaptcha: null,
             totalRows: 1,
             currentPage: 1,
-            perPage: 5,
-            pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
+            perPage: 25,
+            pageOptions: [5, 10, 15,20,25, { value: 100, text: "Show a lot" }],
             sortBy: '',
             sortDesc: false,
             sortDirection: 'asc',
@@ -146,9 +144,8 @@ export default {
             fields: [
                 { key: 'title', label: 'Article', sortable: true, sortDirection: 'desc' },
                 { key: 'body', label: 'email', sortable: true, class: 'text-center' },
-                { key: 'slug', label: 'Text', sortable: true, class: 'text-center' },
+                { key: 'created_at', label: 'Created', sortable: true, class: 'text-center' },
                 {
-
                     formatter: (value, key, item) => {
                         return value ? 'Yes' : 'No'
                     },
@@ -165,7 +162,6 @@ export default {
         }
     },
     computed: {
-
         articles(){
             return this.$store.state.article.articles;
         },
@@ -175,8 +171,6 @@ export default {
         errorMessage(){
             return this.$store.state.article.errors;
         },
-
-
     },
     methods: {
         show(row){
@@ -192,7 +186,6 @@ export default {
             this.recaptcha = response
         },
         submit_form() {
-
             if (this.recaptcha){
                 this.$store.dispatch('article/addArticle', {
                     name: this.name,

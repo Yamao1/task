@@ -21,9 +21,9 @@
                         <div id="files-names" class="uk-grid uk-grid-collapse uk-child-width-1-1" data-uk-grid></div>
                     </div>
                 </div>
-
                 <div class="uk-margin-top-small uk-text-center">
-                    <input type="file" name="file" accept=".png,.jpg,.jpeg,.gif,.webp" id="attachment" @change="uploadPreviewFiles"/>
+                    <input type="file" name="file" accept=".png,.jpg,.gif" id="attachment"
+                           @change="uploadPreviewFiles"/>
                     <div class="alert alert-warning" role="alert" v-if="errorMessage.img">
                         {{ errorMessage.img[0] }}
                     </div>
@@ -44,27 +44,19 @@
                 <div class="toast-body">
                     {{ comment.body }}
                 </div>
-                <div v-if="comment.img !== null" >
-                    <img  :src="comment.img" style="width: 40px;height: 40px" class="rounded me-2" alt="">
-
+                <div v-if="comment.img !== null">
+                    <img :src="comment.img" style="width: 320px;height: 240px" class="rounded me-2" alt="">
                 </div>
-                <div></div>
-
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
-import Dropzone from 'dropzone'
-
 export default {
     data() {
         return {
-            show:'',
-            files:[],
-            // dropzone:null,
+            files: [],
             subject: '',
             body: ''
         }
@@ -81,7 +73,7 @@ export default {
         }
     },
     methods: {
-        showComment(comment){
+        showComment(comment) {
             console.log(comment)
         },
         uploadPreviewFiles(event) {
@@ -127,26 +119,21 @@ export default {
             // console.log(this.files)
 
             let form_data = new FormData()
-            form_data.append('subject' , this.subject)
-            form_data.append('body' , this.body)
-            form_data.append('article_id' , this.$store.state.article.article.id)
-            if (this.files.length > 0){
-                form_data.append('img' , this.files[0])
+            form_data.append('subject', this.subject)
+            form_data.append('body', this.body)
+            form_data.append('article_id', this.$store.state.article.article.id)
+            if (this.files.length > 0) {
+                form_data.append('img', this.files[0])
+
             }
             this.$store.dispatch('article/addComment', form_data)
+
         },
         deleteFileFromList(file, fileCont) {
             this.files.splice(this.files.indexOf(file), 1);
             let filesField = document.getElementById('files-names');
             filesField.removeChild(fileCont);
         }
-    },
-    mounted() {
-        console.log(this.$store.state.article.article.comments)
-        // this.dropzone = new Dropzone(this.$refs.dropzone, {
-        //     url: "sfsdfg",
-        //     autoProcessQueue:false
-        // })
     },
 }
 </script>
@@ -190,6 +177,7 @@ export default {
     padding: 0;
     list-style: none;
 }
+
 /*
  * Grid cell
  * Note: Space is allocated solely based on content dimensions, but shrinks: 0 1 auto
@@ -198,12 +186,14 @@ export default {
 .uk-grid > * {
     margin: 0;
 }
+
 /*
  * Remove margin from the last-child
  */
 .uk-grid > * > :last-child {
     margin-bottom: 0;
 }
+
 /* Gutter
  ========================================================================== */
 /*
@@ -213,9 +203,11 @@ export default {
 .uk-grid {
     margin-left: -30px;
 }
+
 .uk-grid > * {
     padding-left: 30px;
 }
+
 /* Vertical */
 .uk-grid + .uk-grid,
 .uk-grid > .uk-grid-margin,
@@ -228,6 +220,7 @@ export default {
 .uk-grid-column-small {
     margin-left: -15px;
 }
+
 .uk-grid-small > *,
 .uk-grid-column-small > * {
     padding-left: 15px;
@@ -237,6 +230,7 @@ export default {
 .uk-child-width-auto > * {
     width: auto;
 }
+
 .prev-img {
     width: 100px;
     height: 100px;
@@ -245,7 +239,8 @@ export default {
     background-size: cover;
 
 }
-.prev-img :hover img{
+
+.prev-img :hover img {
     -webkit-filter: grayscale(0);
     background-color: red;
     color: red;

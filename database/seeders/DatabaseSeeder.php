@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         $tags = \App\Models\Tag::factory(5)->create();
 
-        $articles = \App\Models\Article::factory(5)->create();
+        $articles = \App\Models\Article::factory(30)->create();
 
         $tags_id = $tags->pluck('id');
         // https://laravel.com/docs/8.x/collections#method-pluck

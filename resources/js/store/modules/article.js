@@ -17,7 +17,6 @@ export const state = {
     commentSuccess:false,
     errors: []
 }
-
 export const actions = {
     getArticleData(context, payload) {
         axios.get('/api/article-json', {params: {'slug':payload}}).then((response) => {
@@ -33,7 +32,6 @@ export const actions = {
             console.log('Ошибка');
         })
     },
-
     addComment(context,payload){
         const option = {headers: {
                 'Content-Type': 'multipart/form-data',
@@ -51,14 +49,12 @@ export const actions = {
         axios.post('/api/article-add-article', {title:payload.name, body:payload.email,slug:payload.text}).then((response)=>{
             context.dispatch('getArticle', response)
         }).catch((error)=>{
-            // console.log(error.response.data.errors)
             if (error.response.status === 422) {
                 context.state.errors = error.response.data.errors;
             }
         })
     }
 }
-
 export const getters = {
     getArticles(state){
         return state.articles
