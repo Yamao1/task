@@ -24,7 +24,7 @@ class CreateRequest extends FormRequest
     {
         return [
             'img'=>'image|mimes:jpg,png,gif',
-            'subject' => 'required',
+//            'subject' => 'required',
             'body' => 'required',
 
         ];
@@ -32,7 +32,7 @@ class CreateRequest extends FormRequest
     public function messages()
     {
         return [
-            'subject.required' => 'Это поле надо обязательно заполнить',
+//            'subject.required' => 'Это поле надо обязательно заполнить',
             'body.required' => 'Это поле надо обязательно заполнить',
             'img.mimes' => 'Только для jpg,gif,png',
         ];

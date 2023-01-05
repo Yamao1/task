@@ -20,6 +20,7 @@ export const state = {
 export const actions = {
     getArticleData(context, payload) {
         axios.get('/api/article-json', {params: {'slug':payload}}).then((response) => {
+             // console.log(response.data.data);
             context.commit('SET_ARTICLE', response.data.data);
         }).catch(() => {
             console.log('Ошибка');
@@ -28,8 +29,16 @@ export const actions = {
     getArticle(context, payload) {
         axios.get('/api/article').then((response) => {
             context.commit('SET_STATE', response.data);
+            // console.log(response.data);
         }).catch(() => {
             console.log('Ошибка');
+        })
+    },
+    getComments(context, payload) {
+        axios.get('/api/article/comments').then((response) => {
+            context.commit('SET_STATE_COMMENT', response.data);
+        }).catch((e) => {
+            console.log(e);
         })
     },
     addComment(context,payload){
@@ -59,6 +68,9 @@ export const getters = {
     getArticles(state){
         return state.articles
     },
+    getComments(state){
+        return state.article.comments
+    },
     articleViews(state) {
         return state.article.statistic.views;
     },
@@ -70,6 +82,9 @@ export const getters = {
 export const mutations = {
     SET_STATE(state, payload){
         return state.articles = payload;
+    },
+    SET_STATE_COMMENT(state, payload){
+        return state.article.comments = payload;
     },
     SET_ARTICLE(state, payload) {
         return state.article = payload;

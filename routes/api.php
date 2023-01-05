@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\CommentController;
-use App\Http\Controllers\ArticleResourceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('article-json', [ArticleController::class, 'show']);
 Route::get('article', [ArticleController::class, 'index']);
+Route::get('article/comments', [ArticleController::class, 'comments']);
 
 Route::post('article-add-comment', [CommentController::class, 'store']);
 Route::post('/article-add-article', [CommentController::class, 'storeArticle']);

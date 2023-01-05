@@ -16,8 +16,9 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'subject' => $this->subject,
+//            'subject' => $this->subject,
             'body' => $this->body,
+            'article_id'=>$this->article_id,
             'img' =>!is_null($this->img)? env('APP_URL'). $this->img:null,
             'created_at' => $this->createdAtForHumans()
         ];

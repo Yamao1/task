@@ -5,10 +5,6 @@
             <h5 class="mt-5">{{ article.title }}</h5>
             <h5 class="mt-5">{{ article.slug }}</h5>
             <p>
-             <span class="tag" v-for="(tag,index) in article.tags">
-                <span v-if="tagsLen == (index+1)">{{ tag.label }}</span>
-                <span class="tag">{{ tag.label }}  |</span>
-             </span>
             </p>
             <p class="card-text">{{ article.body }}</p>
             <p>Опубликованно: <i>{{ article.created_at }}</i></p>

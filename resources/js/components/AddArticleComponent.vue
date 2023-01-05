@@ -1,192 +1,190 @@
 <template>
     <div class="row">
-        <form @submit.prevent="submit_form" :class="{mx_form_inv: formInv}">
-            <div class="bform py-5">
-                <!-- Row -->
-                <div class="row">
-                    <div class="container">
-                        <div class="col-lg-6 align-justify-center pr-4 pl-0 contact-form">
-                            <div class="">
-                                <h2 class="mb-3 font-weight-light">Add New Post</h2>
-                                <form class="mt-3">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input class="form-control" type="text" placeholder="name"
-                                                       v-model="name">
-                                                <div class="alert alert-warning" role="alert" v-if="errorMessage.title">
-                                                    {{errorMessage.title[0]}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <input class="form-control" type="email" placeholder="email address"
-                                                       v-model="email">
-                                                <div class="alert alert-warning" role="alert" v-if="errorMessage.body">
-                                                    {{errorMessage.body[0]}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <input class="form-control" type="text" placeholder="Text"
-                                                       v-model="text">
-                                                <div class="alert alert-warning" role="alert" v-if="errorMessage.slug">
-                                                    {{errorMessage.slug[0]}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div :class="{mx_recaptcha_failed: !recaptcha}">
-                                            <vue-recaptcha
-                                                sitekey="6Lf0BJ0jAAAAAIxB0XMKkJ7b2t-lM5vawQltdohw"
-                                                @verify="mxVerify">
-                                            </vue-recaptcha>
-                                            <br/>
-                                            <small>Doesn't complete!</small>
-                                            <button type="submit"
-                                                    class="btn btn-md btn-block btn-danger-gradiant text-white border-0">
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+        <form class="form-block" @submit.prevent="submit_form">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="form-group fl_icon">
+                        <div class="icon"><i class="fa fa-user"></i></div>
+                        <input v-model="name" class="form-input" type="text" placeholder="Your name">
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.title">{{errorMessage.title[0] }}</div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 fl_icon">
+                    <div class="form-group fl_icon">
+                        <div class="icon"><i class="fa fa-envelope-o"></i></div>
+                        <input class="form-input" type="text" placeholder="Your email" v-model="email">
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.body">{{ errorMessage.body[0] }}</div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <input class="form-input" required="" placeholder="Your text" v-model="text">
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.slug">{{ errorMessage.slug[0] }}</div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div :class="{mx_recaptcha_failed: !recaptcha}">
+                        <vue-recaptcha
+                            sitekey="6Lf0BJ0jAAAAAIxB0XMKkJ7b2t-lM5vawQltdohw"
+                            @verify="mxVerify">
+                        </vue-recaptcha>
+                        <br/>
+                        <small>Doesn't complete!</small>
+                        <button type="submit"
+                                class="btn btn-md btn-block btn-danger-gradiant text-white border-0">
+                        </button>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit">submit</button>
+            </div>
+        </form>
+
+
+
+
+
+        <div class="container" v-for="article in articles">
+
+            <div class="be-comment-block">
+                <h1 class="comments-title"></h1>
+                <div class="be-comment">
+                    <div class="be-img-comment">
+                        <a href="blog-detail-2.html">
+                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="be-ava-comment">
+                        </a>
+                    </div>
+                    <div class="be-comment-content">
+
+				<span class="be-comment-name">
+					<a href="blog-detail-2.html">{{ article.title }}</a>
+					</span>
+                        <span class="be-comment-time">
+					<i class="fa fa-clock-o"></i>
+					May 27, 2015 at 3:14am
+				</span>
+                        <p class="be-comment-text">
+                            {{ article.slug }}
+                        </p>
+                    </div>
+                    <hr>
+                    <div class="post-footer-option container">
+                        <ul class="list-unstyled">
+                            <li><button  type="button" @click="showComments(article.id)"><i class="glyphicon glyphicon-comment"></i> Comment</button></li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <button class="btn btn-success" type="submit">Отправить</button>
-        </form>
-        <b-container fluid>
-            <!-- User Interface controls -->
-            <b-row>
-                <b-col sm="5" md="6" class="my-1">
-                    <b-form-group
-                        label="Per page"
-                        label-for="per-page-select"
-                        label-cols-sm="6"
-                        label-cols-md="4"
-                        label-cols-lg="3"
-                        label-align-sm="right"
-                        label-size="sm"
-                        class="mb-0">
-                        <b-form-select
-                            id="per-page-select"
-                            v-model="perPage"
-                            :options="pageOptions"
-                            size="sm"
-                        ></b-form-select>
-                    </b-form-group>
-                </b-col>
+            <template v-if="isCommentsShow(article.id)">
+                <comment-component
+                    @closeComments="closeComments($event)"
+                    :article_slug="article.slug"
+                    :article_id="article.id"
+                />
+        </template>
+        </div>
 
-                <b-col sm="7" md="6" class="my-1">
-                    <b-pagination
-                        v-model="currentPage"
-                        :total-rows="totalRows"
-                        :per-page="perPage"
-                        align="fill"
-                        size="sm"
-                        class="my-0"
-                    ></b-pagination>
-                </b-col>
-            </b-row>
-            <!-- Main table element -->
-            <b-table
-                :items="articles"
-                :fields="fields"
-                :current-page="currentPage"
-                :per-page="perPage"
-                :filter="filter"
-                :filter-included-fields="filterOn"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
-                :sort-direction="sortDirection"
-                stacked="md"
-                show-empty
-                small
-                @filtered="onFiltered">
-                <template #cell(name)="row">
-                    {{ row.value.first }} {{ row.value.last }}
-                </template>
+<!--        <sorted-table :values="articles">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th scope="col" style="text-align: left; width: 10rem;">-->
+<!--                    <sort-link name="id">ID</sort-link>-->
+<!--                </th>-->
+<!--                <th scope="col" style="text-align: left; width: 10rem;">-->
+<!--                    <sort-link name="name">Name</sort-link>-->
+<!--                </th>-->
+<!--                <th scope="col" style="text-align: left; width: 10rem;">-->
+<!--                    <sort-link name="hits">Hits</sort-link>-->
+<!--                </th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <template #body="sort">-->
+<!--                <tbody>-->
+<!--                <tr v-for="value in sort.articles" :key="value.id">-->
+<!--                    <td>{{ value.id }}</td>-->
+<!--                    <td>{{ value.title }}</td>-->
+<!--                    <td>{{ value.slug }}</td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </template>-->
+<!--        </sorted-table>-->
 
-                <template #row-details="row">
-                    <b-card>
-                        <ul>
-                            <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                        </ul>
-                    </b-card>
-                </template>
-            <template #cell(actions)="row">
-                    <b-button :href="('articles/'+ row.item.slug)" class="mr-1">
-                        More
-                    </b-button>
-                </template>
-            </b-table>
-        </b-container>
+
+
+
+
+
+
+
+
     </div>
 </template>
 <script>
-import { VueRecaptcha } from 'vue-recaptcha';
+
+
+
+
+import {VueRecaptcha} from 'vue-recaptcha';
+import CommentComponent from "./CommentComponent";
 export default {
-    components: { VueRecaptcha },
+
+
+
+    components: {VueRecaptcha,CommentComponent},
     data() {
         return {
-            recaptcha: null,
-            totalRows: 1,
-            currentPage: 1,
-            perPage: 25,
-            pageOptions: [5, 10, 15,20,25, { value: 100, text: "Show a lot" }],
-            sortBy: '',
-            sortDesc: false,
-            sortDirection: 'asc',
-            filter: null,
-            filterOn: [],
-            fields: [
-                { key: 'title', label: 'Article', sortable: true, sortDirection: 'desc' },
-                { key: 'body', label: 'email', sortable: true, class: 'text-center' },
-                { key: 'created_at', label: 'Created', sortable: true, class: 'text-center' },
-                {
-                    formatter: (value, key, item) => {
-                        return value ? 'Yes' : 'No'
-                    },
-                    sortable: true,
-                    sortByFormatted: true,
-                    filterByFormatted: true
-                },
-                { key: 'actions', label: 'Actions' }
+            values: [
+                { name: "Plugin Foo", id: 2, hits: 33 },
+                { name: "Plugin Bar", id: 1, hits: 42 },
+                { name: "Plugin Foo Bar", id: 3, hits: 79 }
             ],
-            formInv:false,
+
+
+
+            show: [],
+            recaptcha: null,
+            formInv: false,
             name: '',
             email: '',
             text: ''
         }
     },
     computed: {
-        articles(){
+
+        articles() {
             return this.$store.state.article.articles;
         },
         commentSuccess() {
             return this.$store.state.article.commentSuccess;
         },
-        errorMessage(){
+        errorMessage() {
             return this.$store.state.article.errors;
         },
     },
+
     methods: {
-        show(row){
-          console.log(this.articles)
-          console.log(row)
+
+
+        closeComments(id){
+           this.show = this.show.filter(item=>item === id)
+            console.log(this.show)
         },
-        onFiltered(articles) {
-            // Trigger pagination to update the number of buttons/pages due to filtering
-            this.totalRows = articles.length
-            this.currentPage = 1
+        isCommentsShow(id){
+            return this.show.includes(id)
         },
-        mxVerify(response){
+        showComments(id){
+            if (this.show.includes(id)){
+                this.show.splice(this.show.indexOf(id),1)
+            }else {
+                this.show.push(id)
+            }
+            this.closeComments(id)
+
+        },
+        mxVerify(response) {
             this.recaptcha = response
         },
         submit_form() {
-            if (this.recaptcha){
+            if (this.recaptcha) {
                 this.$store.dispatch('article/addArticle', {
                     name: this.name,
                     email: this.email,
@@ -195,14 +193,11 @@ export default {
                 this.name = ''
                 this.email = ''
                 this.text = ''
-            }else {
+            } else {
                 this.formInv = true
             }
         },
     },
-    updated(){
-        this.totalRows = this.articles.length
-    }
 }
 </script>
 
@@ -216,8 +211,151 @@ small {
     display: block;
 }
 
-.mx_form_inv .mx_recaptcha_failed small{
+.mx_form_inv .mx_recaptcha_failed small {
     display: block;
+}
+
+body {
+    margin-top: 20px;
+    background-color: #e9ebee;
+}
+
+.be-comment-block {
+    margin-bottom: 50px !important;
+    border: 1px solid #edeff2;
+    border-radius: 2px;
+    padding: 50px 70px;
+    border: 1px solid #ffffff;
+}
+
+.comments-title {
+    font-size: 16px;
+    color: #262626;
+    margin-bottom: 15px;
+    font-family: 'Conv_helveticaneuecyr-bold';
+}
+
+.be-img-comment {
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-bottom: 15px;
+}
+
+.be-ava-comment {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.be-comment-content {
+    margin-left: 80px;
+}
+
+.be-comment-content span {
+    display: inline-block;
+    width: 49%;
+    margin-bottom: 15px;
+}
+
+.be-comment-name {
+    font-size: 13px;
+    font-family: 'Conv_helveticaneuecyr-bold';
+}
+
+.be-comment-content a {
+    color: #383b43;
+}
+
+.be-comment-content span {
+    display: inline-block;
+    width: 49%;
+    margin-bottom: 15px;
+}
+
+.be-comment-time {
+    text-align: right;
+}
+
+.be-comment-time {
+    font-size: 11px;
+    color: #b4b7c1;
+}
+
+.be-comment-text {
+    font-size: 13px;
+    line-height: 18px;
+    color: #7a8192;
+    display: block;
+    background: #f6f6f7;
+    border: 1px solid #edeff2;
+    padding: 15px 20px 20px 20px;
+}
+
+.form-group.fl_icon .icon {
+    position: absolute;
+    top: 1px;
+    left: 16px;
+    width: 48px;
+    height: 48px;
+    background: #f6f6f7;
+    color: #b5b8c2;
+    text-align: center;
+    line-height: 50px;
+    -webkit-border-top-left-radius: 2px;
+    -webkit-border-bottom-left-radius: 2px;
+    -moz-border-radius-topleft: 2px;
+    -moz-border-radius-bottomleft: 2px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.form-group .form-input {
+    font-size: 13px;
+    line-height: 50px;
+    font-weight: 400;
+    color: #b4b7c1;
+    width: 100%;
+    height: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid #edeff2;
+    border-radius: 3px;
+}
+
+.form-group.fl_icon .form-input {
+    padding-left: 70px;
+}
+
+.form-group textarea.form-input {
+    height: 150px;
+}
+
+
+
+a{
+    color:#47649F;
+}
+
+
+/*-- Bootstrap Override Style --*/
+
+
+/*-- Content Style --*/
+.post-footer-option li{
+    float:left;
+    margin-right:50px;
+    padding-bottom:15px;
+}
+
+.post-footer-option li a{
+    color:#AFB4BD;
+    font-weight:500;
+    font-size:1.3rem;
+}
+
+.anchor-username h4{
+    font-weight:bold;
 }
 </style>
 

@@ -22,7 +22,7 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'subject' => $this->faker->sentence('3'),
+//            'subject' => $this->faker->sentence('3'),
             'body' => $this->faker->paragraph('1', false),
 //            'img'=> 'https://via.placeholder.com/50/5f113b/ffffff/?text=img'
         ];
