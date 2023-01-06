@@ -34,14 +34,8 @@ class CommentController extends Controller
         ], 201);
     }
 
-    public function storeArticle(ArticleRequest $request)
-    {
-
-        AddNewArticle::dispatch($request['title'],$request['body'],$request['slug']);
-        return response()->json([
-            'status' => 'success',
-        ], 201);
-
-
+    public function articleComments(){
+        $comments = Comment::all();
+        return $comments;
     }
 }

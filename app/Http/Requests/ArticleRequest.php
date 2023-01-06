@@ -24,8 +24,8 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'body' => 'required|string|email',
+            'name' => 'required',
+            'email' => 'required|string|email',
             'slug' => 'required',
         ];
     }
@@ -33,9 +33,9 @@ class ArticleRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.required' => 'Это поле надо обязательно заполнить',
-            'body.required' => 'Это поле надо обязательно заполнить',
-            'body.email' => 'Это поле для email',
+            'name.required' => 'Это поле надо обязательно заполнить',
+            'email.required' => 'Это поле надо обязательно заполнить',
+            'email.email' => 'Это поле для email',
             'slug.required' => 'Это поле надо обязательно заполнить',
 
         ];

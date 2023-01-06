@@ -6,11 +6,6 @@ export const state = {
     articles:[],
     article: {
         comments: [],
-        tags: [],
-        statistic: {
-            likes: 0,
-            views: 0
-        }
     },
     slug:'',
     likeIt: true,
@@ -20,16 +15,13 @@ export const state = {
 export const actions = {
     getArticleData(context, payload) {
         axios.get('/api/article-json', {params: {'slug':payload}}).then((response) => {
-             // console.log(response.data.data);
             context.commit('SET_ARTICLE', response.data.data);
         }).catch(() => {
-            console.log('Ошибка');
         })
     },
     getArticle(context, payload) {
         axios.get('/api/article').then((response) => {
             context.commit('SET_STATE', response.data);
-            // console.log(response.data);
         }).catch(() => {
             console.log('Ошибка');
         })
@@ -55,14 +47,14 @@ export const actions = {
         })
     },
     addArticle(context,payload){
-        axios.post('/api/article-add-article', {title:payload.name, body:payload.email,slug:payload.text}).then((response)=>{
+        axios.post('/api/article-add-article', {name:payload.name, email:payload.email,slug:payload.slug}).then((response)=>{
             context.dispatch('getArticle', response)
         }).catch((error)=>{
             if (error.response.status === 422) {
                 context.state.errors = error.response.data.errors;
             }
         })
-    }
+    },
 }
 export const getters = {
     getArticles(state){
@@ -80,6 +72,19 @@ export const getters = {
 }
 
 export const mutations = {
+    SET_STATE_SORT(state, payload){
+            const articles = this.state.article.articles;
+        articles.sort((a, b) => {
+                let compare = 0;
+                if (a[payload] > b[payload]) {
+                    compare = 1;
+                } else if (b[payload] > a[payload]) {
+                    compare = -1;
+                }
+                return compare;
+            });
+        this.state.article.articles = articles;
+    },
     SET_STATE(state, payload){
         return state.articles = payload;
     },

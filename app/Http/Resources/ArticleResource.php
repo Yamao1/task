@@ -16,10 +16,10 @@ class ArticleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
+            'name' => $this->name,
             'slug'=>$this->slug,
             'img' => $this->img,
-            'body' => $this->body,
+            'email' => $this->email,
             'created_at' => $this->createdAtForHumans(),
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'tags' => TagResource::collection($this->whenLoaded('tags')),

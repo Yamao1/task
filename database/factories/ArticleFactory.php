@@ -15,12 +15,13 @@ class ArticleFactory extends Factory
      */
     public function definition()
     {
-        $title = $this->faker->sentence(1, true);
-        $slug =  Str::substr(Str::lower(preg_replace('/\s+/', '-', $title )), 0, -1);
+        $name = $this->faker->sentence(1, true);
+        $text = $this->faker->sentence(10, true);
+        $slug =  Str::substr(Str::lower(preg_replace('/\s+/', '-', $text )), 0, -1);
 
         return [
-            'title' => $title,
-            'body' => $this->faker->email(),
+            'name' => $name,
+            'email' => $this->faker->email(),
             'slug' => $slug,
             'created_at' => $this->faker->dateTimeBetween('-1 years'),
             'published_at'=> Carbon::now()

@@ -21,13 +21,13 @@ class AddNewArticle implements ShouldQueue
      */
     public $tries = 3;
 
-    protected $title;
-    protected $body;
+    protected $name;
+    protected $email;
     protected $slug;
-    public function __construct($title, $body, $slug)
+    public function __construct($name, $email, $slug)
     {
-        $this->title = $title;
-        $this->body = $body;
+        $this->name = $name;
+        $this->email = $email;
         $this->slug = $slug;
     }
 
@@ -39,8 +39,8 @@ class AddNewArticle implements ShouldQueue
     public function handle()
     {
         $article = Article::create([
-            "title" => $this->title,
-            "body" => $this->body,
+            "name" => $this->name,
+            "email" => $this->email,
             "slug" => $this->slug
         ]);
     }

@@ -23,12 +23,7 @@
         <div class="container">
             <nav class="navbar navbar-expand bg-light navbar-light">
         <div class="container-fluid">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link menu-link {{$mainLink}} " href="{{route('home')}}">Главная страница</a>
-                </li>
-            </ul>
-            <a class="d-flex justify-content-end" href="https://gitlab.com/homework73/my-site-blog/-/tree/main">
+            <a class="d-flex justify-content-end" href="https://github.com/Yamao1/task.git">
                 <i class="bi bi-github" style="font-size: 2rem;color: black"></i>
             </a>
         </div>

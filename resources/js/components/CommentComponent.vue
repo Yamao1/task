@@ -1,18 +1,10 @@
 <template>
     <div class="row">
-        <!--                <button @click="test"></button>-->
-        <form @submit.prevent="submit_form()"  class="form-block">
+        <form @submit.prevent="submit_form()" >
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
-<!--                    <div class="form-group fl_icon">-->
-<!--                        <label for="commentSubject" class="form-label">Тема комментария</label>-->
-<!--                        <input class="form-input" type="text" v-model="subject">-->
-<!--                        <div class="alert alert-warning" role="alert" v-if="errorMessage.subject">-->
-<!--                            {{ errorMessage.subject[0] }}-->
-<!--                        </div>-->
-<!--                    </div>-->
                     <div class="mb-3">
-                        <label for="commentBody" class="form-label">Комментарий</label>
+                        <label for="commentBody">Комментарий</label>
                         <textarea rows="3" id="commentBody" class="form-control" v-model="body"></textarea>
                         <div class="alert alert-warning" role="alert" v-if="errorMessage.body">
                             {{ errorMessage.body[0] }}
@@ -34,22 +26,14 @@
                         </div>
                     </div>
                 </div>
-                    <button class="btn btn-success" type="submit">Отправить</button>
-                </div>
+            </div>
+            <button class="btn btn-success" type="submit">Отправить</button>
         </form>
-
-
-<!--        <div class="alert alert-success" role="alert" v-else>-->
-<!--            Комментарий успешно отправлен!-->
-<!--        </div>-->
-
-
         <div class="container mt-2" style="min-width: 100%; " v-for="comment in comments">
             <div class="toast showing" style="min-width: 100%" v-if="article_id === comment.article_id">
                 <div class="toast-header">
                     <img src="https://via.placeholder.com/50/5f113b/ffffff/?text=User" class="rounded me-2" alt="">
                     <strong class="me-auto">{{ comment.subject }}</strong>
-                    <small class="text-muted">{{ comment.created_at }}</small>
                 </div>
                 <div class="toast-body">
                     {{ comment.body }}
@@ -59,13 +43,8 @@
                 </div>
             </div>
         </div>
-
-
-
-
     </div>
 </template>
-
 <script>
 export default {
     data() {
@@ -76,8 +55,8 @@ export default {
         }
     },
     props: {
-        article_slug:{
-            type:String
+        article_slug: {
+            type: String
         },
         article_id: {
             type: Number
@@ -95,10 +74,6 @@ export default {
         }
     },
     methods: {
-        // test(){
-        //   console.log(this.article_id)
-        //   console.log(this.comments)
-        // },
         showComment(comment) {
             console.log(comment)
         },
@@ -115,8 +90,6 @@ export default {
                 filePrev.style.backgroundImage = "url('" + URL.createObjectURL(file) + "')";
 
 
-                // let filePrevImg = document.createElement('img');
-                //     filePrevImg.src = URL.createObjectURL(file);
                 let fileName = document.createElement('div');
                 fileName.classList.add("tm-file-name", "uk-width-expand", "uk-text-left");
                 fileName.innerHTML = file.name;
@@ -127,7 +100,6 @@ export default {
                 fileDel.onclick = () => {
                     this.deleteFileFromList(file, fileCont)
                 };
-                // filePrev.append(filePrevImg);
                 filePrevBox.append(filePrev);
                 fileDelBlock.append(fileDel);
                 fileBlock.append(filePrevBox);
@@ -142,7 +114,7 @@ export default {
             }
         },
         submit_form() {
-            this.$emit("closeComments",this.article_id)
+            this.$emit("closeComments", this.article_id)
             this.$store.commit('SET_SLUG', this.article_slug)
             let form_data = new FormData()
             form_data.append('body', this.body)
@@ -152,9 +124,7 @@ export default {
 
             }
             this.$store.dispatch('article/addComment', form_data)
-            // this.$store.dispatch('article/getComments')
             this.body = ''
-            this.deleteFileFromList(file, fileCont)
         },
         deleteFileFromList(file, fileCont) {
             this.files.splice(this.files.indexOf(file), 1);
@@ -163,18 +133,10 @@ export default {
         }
     },
     async mounted() {
-       await this.$store.dispatch('article/getArticleData',this.article_slug)
+        await this.$store.dispatch('article/getArticleData', this.article_slug)
         this.commentArray = this.$store.state.article.article.comments
         console.log(this.$store)
-        // await this.$store.dispatch('article/getComments')
-
-
-
-
     },
-    // updated() {
-    //     this.$store.dispatch('article/getComments')
-    // },
 }
 </script>
 

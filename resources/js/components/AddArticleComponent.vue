@@ -6,19 +6,19 @@
                     <div class="form-group fl_icon">
                         <div class="icon"><i class="fa fa-user"></i></div>
                         <input v-model="name" class="form-input" type="text" placeholder="Your name">
-                        <div class="alert alert-warning" role="alert" v-if="errorMessage.title">{{errorMessage.title[0] }}</div>
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.name">{{errorMessage.name[0] }}</div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 fl_icon">
                     <div class="form-group fl_icon">
                         <div class="icon"><i class="fa fa-envelope-o"></i></div>
                         <input class="form-input" type="text" placeholder="Your email" v-model="email">
-                        <div class="alert alert-warning" role="alert" v-if="errorMessage.body">{{ errorMessage.body[0] }}</div>
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.email">{{ errorMessage.email[0] }}</div>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="form-group">
-                        <input class="form-input" required="" placeholder="Your text" v-model="text">
+                        <input class="form-input" required="" placeholder="Your text" v-model="slug">
                         <div class="alert alert-warning" role="alert" v-if="errorMessage.slug">{{ errorMessage.slug[0] }}</div>
                     </div>
                 </div>
@@ -38,11 +38,17 @@
                 <button class="btn btn-primary" type="submit">submit</button>
             </div>
         </form>
+        <div>
+            <div>Selected: {{ selected }}</div>
 
-
-
-
-
+            <select v-model="selected">
+                <option disabled value="">Please select one for sorting</option>
+                <option>name</option>
+                <option>email</option>
+                <option>created_at</option>
+            </select>
+            <button @click="sort(selected)" type="button" value="title">Sort</button>
+        </div>
         <div class="container" v-for="article in articles">
 
             <div class="be-comment-block">
@@ -56,11 +62,15 @@
                     <div class="be-comment-content">
 
 				<span class="be-comment-name">
-					<a href="blog-detail-2.html">{{ article.title }}</a>
+					<a href="blog-detail-2.html">{{ article.name }}</a>
 					</span>
                         <span class="be-comment-time">
 					<i class="fa fa-clock-o"></i>
-					May 27, 2015 at 3:14am
+					{{ article.created_at }}
+				</span>
+                        <span class="be-comment-time">
+					<i class="fa fa-clock-o"></i>
+					{{ article.email }}
 				</span>
                         <p class="be-comment-text">
                             {{ article.slug }}
@@ -82,74 +92,26 @@
                 />
         </template>
         </div>
-
-<!--        <sorted-table :values="articles">-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--                <th scope="col" style="text-align: left; width: 10rem;">-->
-<!--                    <sort-link name="id">ID</sort-link>-->
-<!--                </th>-->
-<!--                <th scope="col" style="text-align: left; width: 10rem;">-->
-<!--                    <sort-link name="name">Name</sort-link>-->
-<!--                </th>-->
-<!--                <th scope="col" style="text-align: left; width: 10rem;">-->
-<!--                    <sort-link name="hits">Hits</sort-link>-->
-<!--                </th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <template #body="sort">-->
-<!--                <tbody>-->
-<!--                <tr v-for="value in sort.articles" :key="value.id">-->
-<!--                    <td>{{ value.id }}</td>-->
-<!--                    <td>{{ value.title }}</td>-->
-<!--                    <td>{{ value.slug }}</td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--            </template>-->
-<!--        </sorted-table>-->
-
-
-
-
-
-
-
-
-
     </div>
+
 </template>
 <script>
-
-
-
-
 import {VueRecaptcha} from 'vue-recaptcha';
 import CommentComponent from "./CommentComponent";
 export default {
-
-
-
     components: {VueRecaptcha,CommentComponent},
     data() {
         return {
-            values: [
-                { name: "Plugin Foo", id: 2, hits: 33 },
-                { name: "Plugin Bar", id: 1, hits: 42 },
-                { name: "Plugin Foo Bar", id: 3, hits: 79 }
-            ],
-
-
-
+            selected:'',
             show: [],
             recaptcha: null,
             formInv: false,
             name: '',
             email: '',
-            text: ''
+            slug: ''
         }
     },
     computed: {
-
         articles() {
             return this.$store.state.article.articles;
         },
@@ -160,13 +122,14 @@ export default {
             return this.$store.state.article.errors;
         },
     },
-
     methods: {
-
+        sort(key){
+            this.$store.commit('article/SET_STATE_SORT',key)
+        },
 
         closeComments(id){
            this.show = this.show.filter(item=>item === id)
-            console.log(this.show)
+
         },
         isCommentsShow(id){
             return this.show.includes(id)
@@ -188,11 +151,11 @@ export default {
                 this.$store.dispatch('article/addArticle', {
                     name: this.name,
                     email: this.email,
-                    text: this.text,
+                    slug: this.slug,
                 })
                 this.name = ''
                 this.email = ''
-                this.text = ''
+                this.slug = ''
             } else {
                 this.formInv = true
             }
