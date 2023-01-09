@@ -6,20 +6,29 @@
                     <div class="form-group fl_icon">
                         <div class="icon"><i class="fa fa-user"></i></div>
                         <input v-model="name" class="form-input" type="text" placeholder="Your name">
-                        <div class="alert alert-warning" role="alert" v-if="errorMessage.name">{{errorMessage.name[0] }}</div>
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.name">{{
+                                errorMessage.name[0]
+                            }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 fl_icon">
                     <div class="form-group fl_icon">
                         <div class="icon"><i class="fa fa-envelope-o"></i></div>
                         <input class="form-input" type="text" placeholder="Your email" v-model="email">
-                        <div class="alert alert-warning" role="alert" v-if="errorMessage.email">{{ errorMessage.email[0] }}</div>
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.email">{{
+                                errorMessage.email[0]
+                            }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
                     <div class="form-group">
                         <input class="form-input" required="" placeholder="Your text" v-model="slug">
-                        <div class="alert alert-warning" role="alert" v-if="errorMessage.slug">{{ errorMessage.slug[0] }}</div>
+                        <div class="alert alert-warning" role="alert" v-if="errorMessage.slug">{{
+                                errorMessage.slug[0]
+                            }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
@@ -38,9 +47,8 @@
                 <button class="btn btn-primary" type="submit">submit</button>
             </div>
         </form>
-        <div>
+        <div class="selected">
             <div>Selected: {{ selected }}</div>
-
             <select v-model="selected">
                 <option disabled value="">Please select one for sorting</option>
                 <option>name</option>
@@ -49,8 +57,7 @@
             </select>
             <button @click="sort(selected)" type="button" value="title">Sort</button>
         </div>
-        <div class="container" v-for="article in articles">
-
+        <div class="container" v-for="article in paginatedArticles">
             <div class="be-comment-block">
                 <h1 class="comments-title"></h1>
                 <div class="be-comment">
@@ -79,7 +86,11 @@
                     <hr>
                     <div class="post-footer-option container">
                         <ul class="list-unstyled">
-                            <li><button  type="button" @click="showComments(article.id)"><i class="glyphicon glyphicon-comment"></i> Comment</button></li>
+                            <li>
+                                <button type="button" @click="showComments(article.id)"><i
+                                    class="glyphicon glyphicon-comment"></i> Comment
+                                </button>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -90,19 +101,32 @@
                     :article_slug="article.slug"
                     :article_id="article.id"
                 />
-        </template>
+            </template>
+        </div>
+        <div class="pagination">
+            <div class="page"
+                 v-for="page in pages"
+                 :key="page"
+                 :class="{'pageSelected': page === pageNumber}"
+                 @click="pageClick(page)"
+            >{{ page }}
+            </div>
         </div>
     </div>
+
 
 </template>
 <script>
 import {VueRecaptcha} from 'vue-recaptcha';
 import CommentComponent from "./CommentComponent";
+
 export default {
-    components: {VueRecaptcha,CommentComponent},
+    components: {VueRecaptcha, CommentComponent},
     data() {
         return {
-            selected:'',
+            articlePerPage: 25,
+            pageNumber: 1,
+            selected: '',
             show: [],
             recaptcha: null,
             formInv: false,
@@ -112,6 +136,14 @@ export default {
         }
     },
     computed: {
+        paginatedArticles() {
+            let from = (this.pageNumber - 1) * this.articlePerPage;
+            let to = from + this.articlePerPage;
+            return this.articles.slice(from, to);
+        },
+        pages() {
+            return Math.ceil(this.articles.length / 25)
+        },
         articles() {
             return this.$store.state.article.articles;
         },
@@ -123,21 +155,26 @@ export default {
         },
     },
     methods: {
-        sort(key){
-            this.$store.commit('article/SET_STATE_SORT',key)
+        pageClick(page) {
+            this.pageNumber = page
+            this.selected = ''
+        },
+        sort(key) {
+            this.$store.commit('article/SET_STATE_SORT', key)
+            this.selected = ''
         },
 
-        closeComments(id){
-           this.show = this.show.filter(item=>item === id)
+        closeComments(id) {
+            this.show = this.show.filter(item => item === id)
 
         },
-        isCommentsShow(id){
+        isCommentsShow(id) {
             return this.show.includes(id)
         },
-        showComments(id){
-            if (this.show.includes(id)){
-                this.show.splice(this.show.indexOf(id),1)
-            }else {
+        showComments(id) {
+            if (this.show.includes(id)) {
+                this.show.splice(this.show.indexOf(id), 1)
+            } else {
                 this.show.push(id)
             }
             this.closeComments(id)
@@ -145,6 +182,7 @@ export default {
         },
         mxVerify(response) {
             this.recaptcha = response
+
         },
         submit_form() {
             if (this.recaptcha) {
@@ -159,6 +197,7 @@ export default {
             } else {
                 this.formInv = true
             }
+            grecaptcha.reset();
         },
     },
 }
@@ -295,9 +334,8 @@ body {
 }
 
 
-
-a{
-    color:#47649F;
+a {
+    color: #47649F;
 }
 
 
@@ -305,20 +343,42 @@ a{
 
 
 /*-- Content Style --*/
-.post-footer-option li{
-    float:left;
-    margin-right:50px;
-    padding-bottom:15px;
+.post-footer-option li {
+    float: left;
+    margin-right: 50px;
+    padding-bottom: 15px;
 }
 
-.post-footer-option li a{
-    color:#AFB4BD;
-    font-weight:500;
-    font-size:1.3rem;
+.post-footer-option li a {
+    color: #AFB4BD;
+    font-weight: 500;
+    font-size: 1.3rem;
 }
 
-.anchor-username h4{
-    font-weight:bold;
+.anchor-username h4 {
+    font-weight: bold;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page {
+    padding: 8px;
+    border: solid 1px #e7e7e7;
+}
+
+.page:hover {
+    background: #005cbf;
+}
+
+.pageSelected {
+    background: #005cbf;
+    cursor: pointer;
+    color: #e7e7e7;
 }
 </style>
 
